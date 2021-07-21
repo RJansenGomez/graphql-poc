@@ -1,0 +1,46 @@
+type Query {
+    shows(titleFilter: String): [Show]
+    actors(name: String, salaryRange: SalaryRange, nationality: Nationality): [Actor]
+    pet(name: String, type:PetType): [Pet]
+}
+
+type Show {
+    id: Int
+    title: String
+    releaseYear: Int
+    actors: [Actor]
+}
+
+type Actor {
+    name: String
+    nationality: Nationality
+    salary: Float
+    shows: [Show]
+    pet:[Pet]
+}
+
+type Pet {
+    name: String
+    type: PetType
+    owner: Actor
+}
+
+enum PetType {
+    DOG
+    CAT
+    FISH
+    CROCODILE
+    KOALA
+}
+input SalaryRange {
+    start: Float
+    end: Float
+}
+
+enum Nationality {
+    ES
+    FR
+    GB
+    NL
+    IT
+}
