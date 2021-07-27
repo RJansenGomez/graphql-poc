@@ -1,18 +1,47 @@
 type Query {
-    shows(titleFilter: String): [Show]
     actors(name: String, salaryRange: SalaryRange, nationality: Nationality): [Actor]
     pet(name: String, type:PetType): [Pet]
+    showsExtended(titleFilter: String,actorName:String):[Show]
+}
+
+type Mutation {
+    operateShow(show:InputShow):Show
+    operateActor(actor:MutActor):Actor
+}
+
+input InputShow {
+    id: ID!
+    title: String
+    releaseYear: Int
+    actors: [InputActor]
+}
+
+input InputActor {
+    name: ID!
+}
+input InputPet{
+    name: ID!
+    type: PetType
+    owner: InputActor
+}
+
+input MutActor{
+    name: ID!
+    nationality: Nationality
+    salary: Float
+    shows: [InputShow]
+    pet:[InputPet]
 }
 
 type Show {
-    id: Int
+    id: ID!
     title: String
     releaseYear: Int
     actors: [Actor]
 }
 
 type Actor {
-    name: String
+    name: ID!
     nationality: Nationality
     salary: Float
     shows: [Show]

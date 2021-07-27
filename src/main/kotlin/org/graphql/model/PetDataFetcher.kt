@@ -1,10 +1,7 @@
-package com.manomano.graphql.model
+package org.graphql.model
 
-import com.manomano.graphql.model.ActorDataFetcher.Companion.actors
-import com.netflix.graphql.dgs.DgsComponent
-import com.netflix.graphql.dgs.DgsData
-import com.netflix.graphql.dgs.DgsQuery
-import com.netflix.graphql.dgs.InputArgument
+import org.graphql.model.ActorDataFetcher.Companion.actors
+import com.netflix.graphql.dgs.*
 
 @DgsComponent
 class PetDataFetcher() {
@@ -50,6 +47,12 @@ class PetDataFetcher() {
 
     @DgsData(parentType = "Query", field = "pets")
     fun pets() = pets
+
+    @DgsData(parentType = "Pet", field = "owner")
+    fun actors(df: DgsDataFetchingEnvironment): List<Pet> {
+        val actor: ActorDataFetcher.Actor = df.getSource()
+        return forActor(actor.name)
+    }
 
     data class Pet(val name: String, val type: PetType)
     enum class PetType {

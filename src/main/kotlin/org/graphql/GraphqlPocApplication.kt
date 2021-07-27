@@ -1,4 +1,4 @@
-package com.manomano.graphql
+package org.graphql
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -1,6 +1,6 @@
-package com.manomano.graphql.model
+package org.graphql.model
 
-import com.manomano.graphql.model.ActorDataFetcher.Nationality.*
+import org.graphql.model.ActorDataFetcher.Nationality.*
 import com.netflix.graphql.dgs.DgsComponent
 import com.netflix.graphql.dgs.DgsData
 import com.netflix.graphql.dgs.DgsQuery
@@ -41,13 +41,13 @@ class ActorDataFetcher {
     ): List<Actor> {
         var currentActors = actors
         if (name != null) {
-            currentActors = actors.filter { filterName(it, name) }.toList()
+            currentActors = currentActors.filter { filterName(it, name) }.toList()
         }
         if (salaryRange != null) {
-            currentActors = actors.filter { filterSalaryRange(it, salaryRange) }.toList()
+            currentActors = currentActors.filter { filterSalaryRange(it, salaryRange) }.toList()
         }
         if (nationality != null) {
-            currentActors = actors.filter { filterNationality(it, nationality) }.toList()
+            currentActors = currentActors.filter { filterNationality(it, nationality) }.toList()
         }
         return currentActors
     }

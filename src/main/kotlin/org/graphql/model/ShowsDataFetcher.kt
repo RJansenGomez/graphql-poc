@@ -1,5 +1,6 @@
-package com.manomano.graphql.model
+package org.graphql.model
 
+import com.netflix.dgs.codgen.generated.DgsConstants
 import com.netflix.graphql.dgs.*
 
 @DgsComponent
@@ -28,21 +29,42 @@ class ShowsDataFetcher {
         }
     }
 
-    @DgsData(parentType = "Query", field = "shows")
+    @DgsData(parentType = DgsConstants.SHOW.TYPE_NAME, field = "shows")
     fun shows() = shows
 
     @DgsQuery
     fun shows(@InputArgument titleFilter: String?): List<Show> {
         return if (titleFilter != null) {
-            shows.filter { it.title.contains(titleFilter) }
+            filterShowByTitle(shows.toSet(), titleFilter).toList()
         } else {
             shows
         }
     }
 
+    @DgsQuery
+    fun showsExtended(@InputArgument titleFilter: String?, @InputArgument actorName: String?): List<Show> {
+        var currentShows = shows.toSet()
+        if (actorName != null) {
+            val currentActors = ActorDataFetcher().actors(actorName, null, null)
+            currentShows = currentActors.flatMap { searchMap[it.name]!!.toSet() }.toSet()
+        }
+        if (titleFilter != null) {
+            currentShows = filterShowByTitle(currentShows, titleFilter)
+        }
+        return currentShows.toList()
+    }
+
+    private fun filterShowByTitle(
+        currentShows: Set<Show>,
+        titleFilter: String
+    ): Set<Show> {
+        return currentShows.filter { it.title.contains(titleFilter) }.toSet()
+    }
+
     @DgsData(parentType = "Show", field = "actors")
     fun actors(df: DgsDataFetchingEnvironment): List<ActorDataFetcher.Actor> {
         val show: Show = df.getSource()
+
         return ActorDataFetcher.forShow(show.id)
     }
 
